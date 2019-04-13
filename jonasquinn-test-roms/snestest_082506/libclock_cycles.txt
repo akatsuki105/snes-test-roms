@@ -1,0 +1,90 @@
+<seek_cycles>
+
+V:  0 H:312 HC:1250
+V:  1 H:131 HC: 526
+
+1364-1250=114
+         +526
+         =640
+
+028066 php                     A:0280 X:0014 Y:0000 S:01fc D:0000 DB:00 nVmxdIzC <V:  0 H:312 HC:1250> =22
+028067 rep #$20                A:0280 X:0014 Y:0000 S:01fb D:0000 DB:00 nVmxdIzC <V:  0 H:318 HC:1272> =22
+028069 sec                     A:0280 X:0014 Y:0000 S:01fb D:0000 DB:00 nVmxdIzC <V:  0 H:323 HC:1294> =14
+02806a sbc #$0140              A:0280 X:0014 Y:0000 S:01fb D:0000 DB:00 nVmxdIzC <V:  0 H:326 HC:1308> =24= 82
+
+02806d cmp #$0100              A:0140 X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  0 H:332 HC:1332> =24+
+028070 bcc $8078     [$008078] A:0140 X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  0 H:338 HC:1356> =16+
+028072 sec                     A:0140 X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H:  2 HC:   8> =14+
+028073 sbc #$0064              A:0140 X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H:  5 HC:  22> =24+
+028076 bra $806d     [$00806d] A:00dc X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H: 11 HC:  46> =22=100
+
+02806d cmp #$0100              A:00dc X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H: 17 HC:  68> =24+
+028070 bcc $8078     [$008078] A:00dc X:0014 Y:0000 S:01fb D:0000 DB:00 NvmxdIzc <V:  1 H: 23 HC:  92> =22= 46
+
+028078 sec                     A:00dc X:0014 Y:0000 S:01fb D:0000 DB:00 NvmxdIzc <V:  1 H: 28 HC: 114> =14+
+028079 sbc #$009c              A:00dc X:0014 Y:0000 S:01fb D:0000 DB:00 NvmxdIzC <V:  1 H: 32 HC: 128> =24+
+02807c tax                     A:0040 X:0014 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H: 38 HC: 152> =14+
+02807d sep #$20                A:0040 X:0040 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:  1 H: 41 HC: 166> =22+
+02807f jmp ($8413,x) [$028453] A:0040 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:  1 H: 47 HC: 188> =46=120
+
+0282ab lda $00       [$000000] A:0040 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:  1 H: 58 HC: 234> =24+
+0282ad bit #$00                A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 64 HC: 258> =16+
+0282af lda $00       [$000000] A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 68 HC: 274> =24+
+0282b1 bit #$00                A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 74 HC: 298> =16+
+0282b3 lda $00       [$000000] A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 78 HC: 314> =24+
+0282b5 bit #$00                A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 84 HC: 338> =16+
+0282b7 lda $00       [$000000] A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 88 HC: 354> =24+
+0282b9 bit #$00                A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 94 HC: 378> =16+
+0282bb lda $00       [$000000] A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H: 98 HC: 394> =24+
+0282bd bit #$00                A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H:104 HC: 418> =16+
+0282bf xba                     A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H:108 HC: 434> =20=220
+
+0282c0 plp                     A:0000 X:0040 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:  1 H:113 HC: 454> =28+
+0282c1 rtl                     A:0000 X:0040 Y:0000 S:01fc D:0000 DB:00 nVmxdIzC <V:  1 H:120 HC: 482> =44= 72
+                                                                                 <V:  1 H:131 HC: 526>
+
+<seek_frame>
+Note: top portion of this function does not affect timing because seek_cycles is
+called based on the value in the OPHVCT registers below.
+
+028028 lda $2137     [$002137] A:000f X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:225 H: 66 HC: 266> = 6
+<Note: only the last cycle is used, as that is where the OPHVCT is latched.>
+02802b lda $213c     [$00213c] A:0021 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:225 H: 74 HC: 296> =30+
+02802e xba                     A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:225 H: 81 HC: 326> =20+
+02802f lda $213c     [$00213c] A:4900 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:225 H: 86 HC: 346> =30+
+028032 and #$01                A:4948 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:225 H: 94 HC: 376> =16+
+028034 xba                     A:4900 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIZC <V:225 H: 98 HC: 392> =20+
+028035 rep #$20                A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvMxdIzC <V:225 H:103 HC: 412> =22+
+028037 sta $1ffe     [$001ffe] A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:108 HC: 434> =40+=184
+
+02803a sec                     A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:118 HC: 474> =14+
+02803b sbc #$0039              A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:122 HC: 488> =24+
+02803e cmp $1ffc     [$001ffc] A:0010 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:128 HC: 512> =40+
+<DRAM refresh -40: DRAM refresh will always occur here, due to wait for vblank code at top of routine>
+028041 php                     A:0010 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:148 HC: 592> =22+
+028042 php                     A:0010 X:0000 Y:0000 S:01fa D:0000 DB:00 nvmxdIzC <V:225 H:153 HC: 614> =22+
+028043 pla                     A:0010 X:0000 Y:0000 S:01f9 D:0000 DB:00 nvmxdIzC <V:225 H:159 HC: 636> =36+
+028044 and #$0002              A:0505 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:168 HC: 672> =24+
+028047 eor #$0002              A:0000 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIZC <V:225 H:174 HC: 696> =24+
+02804a sta $1ffc     [$001ffc] A:0002 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:180 HC: 720> =40+
+02804d lda $1ffe     [$001ffe] A:0002 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:190 HC: 760> =40+
+028050 asl a                   A:0049 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:200 HC: 800> =14+
+028051 asl a                   A:0092 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzc <V:225 H:203 HC: 814> =14+
+028052 sec                     A:0124 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzc <V:225 H:207 HC: 828> =14+
+028053 sbc $1ffc     [$001ffc] A:0124 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:210 HC: 842> =40+
+028056 sta $1ffe     [$001ffe] A:0122 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:220 HC: 882> =40=408
+
+028059 lda #$bc34              A:0122 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIzC <V:225 H:230 HC: 922> =24+
+02805c sec                     A:bc34 X:0000 Y:0000 S:01fb D:0000 DB:00 NvmxdIzC <V:225 H:236 HC: 946> =14+
+02805d sbc $1ffe     [$001ffe] A:bc34 X:0000 Y:0000 S:01fb D:0000 DB:00 NvmxdIzC <V:225 H:240 HC: 960> =40+
+028060 jsl $028066   [$028066] A:bb12 X:0000 Y:0000 S:01fb D:0000 DB:00 NvmxdIzC <V:225 H:250 HC:1000> =62=140
+                                                                                 <V:225 H:265 HC:1062>
+
+028076 ply                     A:0000 X:0008 Y:0000 S:01f2 D:0000 DB:00 NvmxdIzC <V:261 H:280 HC:1120> =36+
+028077 plx                     A:0000 X:0008 Y:0000 S:01f4 D:0000 DB:00 nvmxdIZC <V:261 H:289 HC:1156> =36+
+028078 pla                     A:0000 X:0000 Y:0000 S:01f6 D:0000 DB:00 nvmxdIZC <V:261 H:298 HC:1192> =36+
+028079 pld                     A:0001 X:0000 Y:0000 S:01f8 D:0000 DB:00 nvmxdIzC <V:261 H:307 HC:1228> =36+
+02807a plb                     A:0001 X:0000 Y:0000 S:01fa D:0000 DB:00 nvmxdIZC <V:261 H:316 HC:1264> =28+
+02807b plp                     A:0001 X:0000 Y:0000 S:01fb D:0000 DB:00 nvmxdIZC <V:261 H:323 HC:1292> =28+
+02807c rtl                     A:0001 X:0000 Y:0000 S:01fc D:0000 DB:00 nvMxdIzC <V:261 H:329 HC:1320> =44=244
+                                                                                 <V:  0 H:  0 HC:   0>

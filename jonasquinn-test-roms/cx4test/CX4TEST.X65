@@ -1,0 +1,542 @@
+; CX4 TEST BY OVERLOAD (codeviolation@hotmail.com)
+
+.INCLUDE "memory.x65"
+.INCLUDE "..\regs.x65"
+
+.DEFINE StrOutput	$1000
+
+.enum $0000
+        color           db
+        RAM1            db
+        RAM2            db
+        REG1            db
+.ende
+
+.bank 0
+.org $0000
+
+Reset:
+	clc
+	xce
+	rep	#$30
+        ldx     #$1fff
+        txs
+        sep     #$20
+        phd
+	pea	$2100
+        pld
+
+	lda	#$80
+	sta	$00
+
+	ldx	#$0033
+Reset_PPU:
+	stz	$00, x
+	stz	$00, x
+	dex
+	bne	Reset_PPU
+
+	ldx	#$0100
+Reset_CGRAM:
+	stz	$22
+	stz	$22
+	dex
+	bne	Reset_CGRAM
+
+	ldx	#$8000
+Reset_VRAM:
+	stz	$18
+	dex
+	bne	Reset_VRAM
+
+	pea     $4200
+        pld
+
+	ldx	#$000e
+Reset_CPU:
+	dex
+	stz	$00, x
+	bne	Reset_CPU
+
+	pld
+
+	ldx	#$2000
+Reset_WRAM:
+	dex
+	stz	$00, x
+	bne	Reset_WRAM
+
+	lda	#$80
+	sta	VMAINC
+
+        ldx	#$0100
+        stx	VMADD
+
+	ldx	#$1801
+	stx	$4300
+	ldx	#VROM
+	stx	$4302
+	stz	$4304
+	ldx	#1024
+	stx	$4305
+	ldx	#$2202
+	stx	$4310
+	ldx	#Palette
+	stx	$4312
+	stz	$4314
+	ldx	#$0020
+	stx	$4315
+
+	lda	#$03
+	sta	MDMAEN
+
+	lda	#$01
+	sta	BGMODE
+
+	lda	#$40
+	sta	BG3SC
+
+	lda	#$04
+	sta	TM
+
+	lda	#$ff
+	sta	BG3VOFS
+	sta	BG3VOFS
+
+        jsr     Mem_Test
+
+        lda     #$08
+        sta     color
+
+        ldx     #$ffc0
+        ldy     #$0042
+        jsr     StrCopy
+        ldx     #Text1
+        ldy     #$0066
+        jsr     StrCopy
+        lda     $ffdb
+        jsr     StrHexB
+        ldy     #$0082
+        jsr     StrCopy
+        ldy     #$00AA
+        jsr     StrCopy
+
+        ldx     #Test1
+        ldy     #$0142
+        jsr     StrCopy
+        ldy     #$0182
+        jsr     StrCopy
+        ldy     #$01C2
+        jsr     StrCopy
+        ldy     #$0202
+        jsr     StrCopy
+        ldy     #$0242
+        jsr     StrCopy
+        ldy     #$0282
+        jsr     StrCopy
+        ldy     #$02C2
+        jsr     StrCopy
+
+        jsr     CX4_MemTest1
+        ldy     #$0176
+        jsr     StrBool
+        jsr     CX4_RAMTest1
+        ldy     #$01B6
+        jsr     StrBool
+        jsr     CX4_RAMTest2
+        ldy     #$01F6
+        jsr     StrBool
+        jsr     CX4_RegTest1
+        ldy     #$0236
+        jsr     StrBool
+        jsr     CX4_RegTest2
+        ldy     #$0276
+        jsr     StrBool
+        jsr     CX4_RegTest3
+        ldy     #$02B6
+        jsr     StrBool
+        jsr     CX4_RegTest4
+        ldy     #$02F6
+        jsr     StrBool
+
+        jsr     WaitBlank
+
+loop:   bra     loop
+
+;-------------------------------------------------------------------------------
+
+Mem_Test:
+        ldx     #$6000
+        ldy     #$0000
+Mem_Loop:
+        lda     #$00
+        sta     $7f0000, x
+
+        lda     $0000, x
+        cmp     $6000, y
+        beq     Mem_Open
+
+        lda     #$01
+        sta     $7f0000, x
+Mem_Open:
+        iny
+        inx
+        bpl     Mem_Loop
+        rts
+
+;-------------------------------------------------------------------------------
+
+StrBool:
+        cpx     #$0000
+        bne     Test_Fail
+        ldx     #Text_Ok
+        jsr     StrCopy
+Test_Fail:
+        rts
+
+;-------------------------------------------------------------------------------
+
+CX4_MemTest1:
+        stz     RAM1
+        stz     RAM2
+        stz     REG1
+
+        ldx     #$6000
+        ldy     #$0C00
+
+MT1_A:  lda     $7f0000, x
+        bne     MT1_Z
+        inx
+        dey
+        bne     MT1_A
+
+        inc     RAM1
+
+        ldx     #$7000
+        ldy     #$0C00
+
+MT1_B:  lda     $7f0000, x
+        bne     MT1_Z
+        inx
+        dey
+        bne     MT1_B
+
+        inc     RAM2
+
+        ldx     #$7f40
+        ldy     #$00C0
+
+MT1_C:  lda     $7f0000, x
+        bne     MT1_Z
+        inx
+        dey
+        bne     MT1_C
+
+        inc     REG1
+
+MT1_Z:  tyx
+        rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RAMTest1:
+        ldx     #$0C00
+
+        lda     RAM1
+        beq     ST1_Z
+
+ST1_A:  lda     #$01
+ST1_B:  sta     $6fff, x
+        cmp     $5fff, x
+        bne     ST1_Z
+        asl     a
+        bne     ST1_B
+        dex
+        bne     ST1_A
+
+ST1_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RAMTest2:
+        ldx     #$0C00
+
+        lda     RAM2
+        beq     ST2_Z
+
+ST2_A:  lda     #$01
+ST2_B:  sta     $5fff, x
+        cmp     $6fff, x
+        bne     ST2_Z
+        asl     a
+        bne     ST2_B
+        dex
+        bne     ST2_A
+
+ST2_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RegTest1:
+        ldx     #$ffff
+
+        lda     REG1
+        beq     RT1_Z
+
+        lda     #$ff
+        sta     $7f48
+        sta     $7f4c
+        sta     $7f4e
+
+        lda     $7f48
+        cmp     #$01
+        bne     RT1_Z
+        eor     #$ff
+        sta     $7f48
+        lda     $7f48
+        bne     RT1_Z
+
+        lda     $7f4c
+        cmp     #$03
+        bne     RT1_Z
+        eor     #$ff
+        sta     $7f4c
+        lda     $7f4c
+        bne     RT1_Z
+
+        lda     $7f4e
+        cmp     #$7f
+        bne     RT1_Z
+        eor     #$ff
+        sta     $7f4e
+        lda     $7f4e
+        bne     RT1_Z
+
+        ldx     #$0000
+RT1_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RegTest2:
+        ldx     #$ffff
+
+        lda     REG1
+        beq     RT2_Z
+
+        lda     #$ff
+        sta     $7f50
+        sta     $7f51
+        sta     $7f52
+
+        lda     $7f50
+        cmp     #$77
+        bne     RT2_Z
+        eor     #$ff
+        sta     $7f50
+        lda     $7f50
+        bne     RT2_Z
+
+        lda     $7f51
+        cmp     #$01
+        bne     RT2_Z
+        eor     #$ff
+        sta     $7f51
+        lda     $7f51
+        bne     RT2_Z
+
+        lda     $7f52
+        cmp     #$01
+        bne     RT2_Z
+        eor     #$ff
+        sta     $7f52
+        lda     $7f52
+        bne     RT2_Z
+
+        ldx     #$0000
+RT2_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RegTest3:
+        ldx     #$0020
+
+        lda     REG1
+        beq     RT3_Z
+
+RT3_A:  lda     #$01
+RT3_B:  sta     $7f5f, x
+        cmp     $7f5f, x
+        bne     RT3_Z
+        asl     a
+        bne     RT3_B
+        dex
+        bne     RT3_A
+
+RT3_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+CX4_RegTest4:
+        ldx     #$0030
+
+RT4_A:  lda     #$01
+RT4_B:  sta     $7f7f, x
+        cmp     $7fbf, x
+        bne     RT4_Z
+        asl     a
+        bne     RT4_B
+        dex
+        bne     RT4_A
+
+        ldx     #$0010
+
+RT4_C:  lda     #$ff
+        sta     $7faf, x
+        lda     $7faf, x
+        bne     RT4_Z
+        dex
+        bne     RT4_C
+
+        ldx     #$0030
+
+RT4_D:  lda     #$01
+RT4_E:  sta     $7fbf, x
+        cmp     $7f7f, x
+        bne     RT4_Z
+        asl     a
+        bne     RT4_E
+        dex
+        bne     RT4_D
+
+        ldx     #$0010
+
+RT4_F:  lda     #$ff
+        sta     $7fef, x
+        lda     $7fef, x
+        bne     RT4_Z
+        dex
+        bne     RT4_F
+
+RT4_Z:  rts
+
+;-------------------------------------------------------------------------------
+
+WaitBlank:
+	lda	$4210
+	bpl	WaitBlank
+
+        lda	#$80
+        sta	VMAINC
+
+	ldx	#$4000
+	stx	VMADD
+
+	ldx	#$1801
+	stx	$4300
+	ldx	#StrOutput
+	stx	$4302
+	stz	$4304
+	ldx	#$0800
+	stx	$4305
+
+	lda	#$01
+	sta	MDMAEN
+
+        lda	#$0f
+        sta	INIDISP
+	rts
+
+;	x - @string
+;	y - position
+;
+StrCopy:
+	lda	$0000, x
+        bmi     ColChar
+        beq     EndChar
+        inx
+	sta	StrOutput, y
+        iny
+        lda     color
+        sta     StrOutput, y
+        iny
+	bra	StrCopy
+ColChar:
+        inx
+        and     #$7f
+        sta     color
+        bra     StrCopy
+EndChar:
+	inx
+	rts
+
+;	a - data
+;	y - position
+;
+StrHexB:
+	pha
+	lsr	a
+	lsr	a
+	lsr	a
+	lsr	a
+	cmp	#$0A
+	bcc	L1
+	adc	#$06
+L1:	adc	#$30
+	sta	StrOutput, y
+        iny
+        lda	color
+	sta	StrOutput, y
+	iny
+	pla
+	and	#$0f
+	cmp	#$0A
+	bcc	L2
+	adc	#$06
+L2:	adc	#$30
+	sta.w	StrOutput, y
+	iny
+        lda	color
+	sta.w	StrOutput, y
+	iny
+	rts
+
+EmptyHandler:
+	rti
+
+Palette:
+.dw	$0000
+.dw	$0000
+.dw	$0140
+.dw	$0260
+.dw	$0000
+.dw	$0000
+.dw	$0260
+.dw	$03e0
+.dw	$0000
+.dw	$0000
+.dw	$5673
+.dw	$7fff
+.dw	$0000
+.dw	$0000
+.dw	$0000
+.dw	$03ff
+
+Text1:
+.db     $80, "VERSION 1.", $00
+.db     $80, "BY ", $84, "OVERLOAD", $00
+.db     $80, "2010-03-03",$00
+
+Text_Ok:
+.db     $84, "PASS", $00
+
+Test1:
+.db     "MEMORY TEST ............. FAIL", $00
+.db     "$6000-$6BFF ............. FAIL", $00
+.db     "$7000-$7BFF ............. FAIL", $00
+.db     "$7F40-$7F4F ............. FAIL", $00
+.db     "$7F50-$7F5F ............. FAIL", $00
+.db     "$7F60-$7F7F ............. FAIL", $00
+.db     "$7F80-$7FFF ............. FAIL", $00
+
+VROM:
+.incbin "exheat.chr"

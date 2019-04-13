@@ -1,0 +1,29 @@
+Ok, it's pretty easy, but you need something with a debugger to really understand what's going on. Basically each test it does as part of the electronics test has a status byte at 7E/0060-7E/0075 or so. Once the test completes you can check that RAM area to see what passed/failed. If a test passed, it's byte is 0xff, otherwise it's 0x00.
+
+The tests are:
+0x60 = test WRAM
+0x61 = tests NMI, also insures 00/1000-1005 and 20/1000-1005 are mirrors
+0x62 = tests read/write from 7e/2000-7f/ffff
+0x63 = test 2180-2183 read/write WRAM
+0x64/0x65 - test VRAM even and odd locations to make sure they retain data
+0x66 = test DMA registers read/write
+0x67 = test read/write OAM
+0x68 = test read/write palette RAM
+0x69 = test hardware multiply at 4202-4203
+0x6a = test hardware multiply at 211b-211c
+0x6b = test hardware divide at 4204-4206
+0x6c = test DMA to 2118-2119 + DMA from 2139-213a
+0x6d = test HCNT and VCNT.
+--- subtest 1: wait until immediately after VBlank. Latch the counters. VCNT must be 0, HCNT must be between 0x10 and 0x40.
+--- subtest 2: wait until immediately after VBlank, then wait until HBlank starts. Latch the counters. VCNT must be 0, HCNT must be between 0x110 and 0x140.
+--- subtest 3: wait until the start of VBlank and latch the counters. VCNT must be 0xe1 and HCNT must be between 0x10 and 0x40.
+0x6e = sets HIRQs and VIRQs at various screen positions and makes sure they fire appropriately
+0x6f = test DMA from VRAM to WRAM
+0x70 = same as subtest 3 of 0x6d, but tests both 240-line and 224-line modes. In 240-line VCNT must be 0xf0 at the start of VBlank rather than 0xe1.
+0x71 = Turn on interlace mode and make sure the even/odd field bit (I forget which register) toggles appropriately
+0x72 = test bits 6 & 7 of 4212 (Vblank and Hblank status) against HCNT and VCNT
+0x73 = test OAM range/time over flags
+0x74 = apparently not used
+0x75 = A few basic 65816 tests, if you don't pass this you have a real problem
+
+Credit goes to TRAC and anomie for these. Any errors are likely my fault though.

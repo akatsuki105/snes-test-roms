@@ -1,0 +1,77 @@
+The idea behind this test is to see if the color-halve applies before or after
+the actual add/sub of pixel data. As my tests reveal, the color-halve applies
+*after* the add/sub. The included ROM, demo.smc, demonstrates this proof by
+using the information below.
+In a nutshell, the colors are very close either way, but because halving the
+color will clip the lowest bit off, it is possible to be off-by-1 sometimes
+between the two.
+This occurs when the lowest bit of both the source and dest value are set.
+The result is that shifting after adding will end up 1 single level of intensity
+higher than shifting before adding.
+The idea behind the test was to write only two colors to the screen. To do this,
+I split the screen vertically, coloring the first 128 vertical scanlines with
+colors 15 + 0, and the next 96 scanlines with colors 15 + 1.
+If the shifting were to occur before addition, then the screen would be a solid
+color (7). If it were to occur after addition, the top half of the screen would
+be color 7, and the bottom half would be color 8.
+I tested this ROM with a real SNES using a Super UFO 8.3j copier. The result is
+that there are two distinctly different colors on the screen, thusly meaning that
+shifting is performed after the add/sub. ~byuu
+
+Sample code:
+---
+This sets the source pixel color blue to %01111 (15)
+---
+  lda #$00 : sta $2121
+  lda #$00 : sta $2122
+  lda #$3c : sta $2122
+---
+Color-halve mode affecting the back area
+---
+  lda.b #%00000000 : sta $2130
+  lda.b #%01100000 : sta $2131
+---
+Color-add/sub value setting
+---
+  lda !hcounter           ;hcounter tells us the current vertical line (0 - 223)
+  lsr #7                  ;divide by 128, this way, the first 128 scanlines are color 0, the
+  and #$1f                ;other 96 are color 1. Mask the color to be safe (not really needed).
+  ora #$80                ;set this color to affect blue intensity
+  sta $2132               ;store in color register
+  rep #$20
+  inc !hcounter
+  lda !hcounter
+  cmp.w #224 : bcs .end   ;continue until entire screen has been rendered
+  sep #$20 : bra .loop
+.end
+  sep #$20
+  lda #$00 : sta $2132
+  rts
+---
+
+The formulas below work on one single color element. Each
+pixel contains data for red, green, and blue. Each will
+need to be adjusted appropriately.
+
+halve_before formula: [s = source color, d = dest color]
+  s >>= 1;
+  d >>= 1;
+  r = s + d;
+  if(r > 31)r = 31;
+  if(r <  0)r =  0;
+
+halve_after formula: [s = source color, d = dest color]
+  r = s + d;
+  r >>= 1;
+  if(r > 31)r = 31;
+  if(r <  0)r =  0;
+
+color 0 = {
+  (15 >> 1) + (0 >> 1) = 7 + 0 =  7 -- before
+  15 + 0 = (15 >> 1)           =  7 -- after
+}
+
+color 1 = {
+  (15 >> 1) + (1 >> 1) = 7 + 0 =  7 -- before
+  15 + 1 = (16 >> 1)           =  8 -- after
+}

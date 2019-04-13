@@ -1,0 +1,60 @@
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+; SNES ROM Bank Map
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+.MEMORYMAP
+                 
+SLOTSIZE $8000
+DEFAULTSLOT 0    
+SLOT 0 $8000     
+.ENDME
+
+.ROMBANKSIZE $8000
+.ROMBANKS 1
+
+.BANK 0 
+
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+;  Cartridge Header                                                             
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+.ORG    $7FB0
+.DB     "KB"
+.DB     "XC4J"
+
+.ORG    $7FBF
+.DB     $10
+.DB     "CX4 TEST PROGRAM"
+
+.ORG    $7FD5
+.DB     $20             ; Memory Mode
+.DB     $f3             ; ROM Type
+.DB     $00             ; ROM Size
+.DB     $00             ; SRAM Size
+.DB     $00             ; Country
+.DB     $33             ; License Code
+.DB     $00             ; Version
+.DW     $FFFF           ; Checksum Complement
+.DW     $0000          	; Checksum
+
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+; Interrupt Vector Table
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+.ORG    $7FE4	 	; === Native Mode ===
+.DW     EmptyHandler	; COP
+.DW     EmptyHandler	; BRK
+.DW     EmptyHandler	; ABORT
+.DW     EmptyHandler	; NMI
+.DW     $0000	    	; (Unused)
+.DW     EmptyHandler	; IRQ
+
+.ORG    $7FF4	  	; === Emulation Mode ===
+.DW     EmptyHandler	; COP
+.DW     $0000	   	; (Unused)
+.DW     EmptyHandler	; ABORT
+.DW     EmptyHandler	; NMI
+.DW     Reset	  	; RESET
+.DW     EmptyHandler	; IRQ/BRK
+
+;=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

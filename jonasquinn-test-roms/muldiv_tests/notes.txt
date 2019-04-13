@@ -1,0 +1,25 @@
+mul
+---
+WRMPYB write starts multiply if one isn't running.
+WRMPYB write clears RDMPY even if multiply is in progress (value written is ignored).
+WRMPYA write doesn't affect current multiply.
+
+Start multiply:
+	Copy WRMPYA to RDDIVL.
+	Copy WRMPYB to RDDIVH.
+	Copy WRMPYB to internal left shifter.
+
+Each step of multiply:
+	If low bit of RDDIVL is set, add internal shifter to RDMPY.
+	Internal shifter left by one bit.
+
+
+div
+---
+WRDIVL write during divide has no effect on result.
+WRDIVH write during divide has no effect on result.
+WRDIVB write during divide reloads RDMPY with last written value to WRDIV (value written is ignored).
+
+Start divide:
+	Copy WRDIV to RDMPY.
+	Copy WRDIVB to internal right shifter.
