@@ -25,4 +25,12 @@ Posted by Sour [on the nesdev forum][p].
 > been enough to fix the games that freeze. Will have to start looking at other
 > stuff (DMA timing, IRQ timing, etc) to see if I can find more issues.
 
-[video](,/op_timing_test_v2-GPM-02-NTSC-2019_06_30-3myuKodnw_k.mp4)
+[video](results/op_timing_test_v2-GPM-02-NTSC-2019_06_30-3myuKodnw_k.mp4)
+
+Later in the thread, creaothceann [posted their own results][cv]:
+
+[cv]: https://forums.nesdev.com/viewtopic.php?f=12&t=18658&p=240349#p240349
+
+- [NTSC 1CHIP](./results/amarec(20190630-1948)_-_NTSC_Super_Famicom__1CHIP-02.avi)
+- [NTSC GPM-02](./results/amarec(20190630-1956)_-_NTSC_Super_Famicom__SNS-CPU-GPM-02.avi)
+- [PAL CPU-01](./results/amarec(20190630-2203)_-_PAL__Super_Nintendo_SNSP-CPU-01.avi)
