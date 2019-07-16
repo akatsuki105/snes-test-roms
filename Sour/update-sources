@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd "$(dirname "$0")/.."
+
+git subtree pull -P Sour/SnesTests https://github.com/SourMesen/SnesTests master
