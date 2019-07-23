@@ -1,7 +1,13 @@
-# CPU tests by PeterLemon
+# Tests by PeterLemon
 
-This is a `git subtree` mirror of the `CPUTest/CPU` directory
-of [the original repository][r].
-Run `./update-sources` to update the mirror to the latest version.
+This contains `git subtree` mirrors of various parts of
+[the original repository][r].
+
+  - [SNES-CPUTest-CPU](./SNES-CPUTest-CPU/) mirrors
+    the `CPUTest/CPU` directory.
+  - [SNES-CHIP-GSU-GSUTest](./SNES-CHIP-GSU-GSUTest/) mirrors
+    the `CHIP/GSU/GSUTest` directory.
+
+Run the corresponding update script to update the mirror to the latest version.
 
 [r]: https://github.com/PeterLemon/SNES/
