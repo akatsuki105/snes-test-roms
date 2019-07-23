@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+
+cd "$(dirname "$0")"
+
+GIT_ROOT=$(git rev-parse --show-toplevel)
+TEMP_WD=$(mktemp -d)
+trap 'rm -rf "$TEMP_WD"' EXIT 
+
+echo "Downloading the CPU test repository into $TEMP_WD ..."
+cd "$TEMP_WD"
+git clone https://github.com/PeterLemon/SNES .
+
+echo "Extracting just the Super-FX tests..."
+SFX_TESTS=$(git subtree split -P CHIP/GSU/GSUTest HEAD)
+
+echo "Merging the tests into our repo..."
+cd "$GIT_ROOT"
+git subtree pull -P PeterLemon/SNES-CHIP-GSU-GSUTest "$TEMP_WD" "$SFX_TESTS"
