@@ -12,8 +12,8 @@ cd "$TEMP_WD"
 git clone https://github.com/PeterLemon/SNES .
 
 echo "Extracting just the CPU tests..."
-CPU_TESTS=$(git subtree split -P CPUTest/CPU HEAD)
+git branch subtree-export $(git subtree split -P CPUTest/CPU HEAD)
 
 echo "Merging the tests into our repo..."
 cd "$GIT_ROOT"
-git subtree pull -P PeterLemon/SNES-CPUTest-CPU "$TEMP_WD" "$CPU_TESTS"
+git subtree pull -P PeterLemon/SNES-CPUTest-CPU "$TEMP_WD" subtree-export

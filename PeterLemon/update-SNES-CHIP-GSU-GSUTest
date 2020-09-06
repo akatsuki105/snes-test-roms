@@ -12,8 +12,8 @@ cd "$TEMP_WD"
 git clone https://github.com/PeterLemon/SNES .
 
 echo "Extracting just the Super-FX tests..."
-SFX_TESTS=$(git subtree split -P CHIP/GSU/GSUTest HEAD)
+git branch subtree-export $(git subtree split -P CHIP/GSU/GSUTest HEAD)
 
 echo "Merging the tests into our repo..."
 cd "$GIT_ROOT"
-git subtree pull -P PeterLemon/SNES-CHIP-GSU-GSUTest "$TEMP_WD" "$SFX_TESTS"
+git subtree pull -P PeterLemon/SNES-CHIP-GSU-GSUTest "$TEMP_WD" subtree-export
