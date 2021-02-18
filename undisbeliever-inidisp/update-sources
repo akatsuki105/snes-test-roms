@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd "$(dirname "$0")/.."
+
+git subtree pull -P undisbeliever-inidisp/sources https://github.com/undisbeliever/snes-test-roms.git master
