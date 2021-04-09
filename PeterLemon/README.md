@@ -8,6 +8,9 @@ This contains `git subtree` mirrors of various parts of
   - [SNES-CHIP-GSU-GSUTest](./SNES-CHIP-GSU-GSUTest/) mirrors
     the `CHIP/GSU/GSUTest` directory.
 
+Unless otherwise noted,
+tests are built with the `bass` assembler.
+
 Run the corresponding update script to update the mirror to the latest version.
 
 [r]: https://github.com/PeterLemon/SNES/
