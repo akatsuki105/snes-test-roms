@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+
+cd "$(dirname "$0")"
+
+GIT_ROOT=$(git rev-parse --show-toplevel)
+TEMP_WD=$(mktemp -d)
+trap 'rm -rf "$TEMP_WD"' EXIT 
+
+echo "Downloading the SPC700 test repository into $TEMP_WD ..."
+cd "$TEMP_WD"
+git clone https://github.com/PeterLemon/SNES .
+
+echo "Extracting just the SPC700 tests..."
+git branch subtree-export $(git subtree split -P CPUTest/SPC700 HEAD)
+
+echo "Merging the tests into our repo..."
+cd "$GIT_ROOT"
+git subtree pull -P PeterLemon/SNES-CPUTest-SPC700 "$TEMP_WD" subtree-export
