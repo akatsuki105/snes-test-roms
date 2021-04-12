@@ -1,6 +1,6 @@
 # Motive's test ROMs
 
-Posted by user Motive in the Mesen-S thread [on the nesdev forum][p].
+Posted by user Motive in the Mesen-S thread on the nesdev forum.
 
 Motive originally [posted HblankEmuTest.sfc with the description for
 SplitScreen.sfc](https://forums.nesdev.com/viewtopic.php?p=237178#p237178)
