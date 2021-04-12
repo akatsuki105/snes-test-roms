@@ -1,3 +1,5 @@
+; Checks if some combination of H/V-IRQs fire at all
+
 lorom
 org $008000 : fill $020000
 

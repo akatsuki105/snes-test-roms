@@ -1,3 +1,5 @@
+; Doesn't really test anything, it just dumps some irq trigger points to sram
+
 lorom
 org $008000 : fill $020000
 

@@ -1,3 +1,6 @@
+; Seems to be some other timing tests.
+; Some code is uploaded to the smp to make the comm ports always return #$18
+
 lorom
 org $008000 : fill $020000
 
